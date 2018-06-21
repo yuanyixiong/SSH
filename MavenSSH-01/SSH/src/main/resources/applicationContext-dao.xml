@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" 
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+    	http://www.springframework.org/schema/beans 
+    	classpath:org/springframework/beans/factory/xml/spring-beans-4.3.xsd 
+    	
+        http://www.springframework.org/schema/context 
+        classpath:org/springframework/context/config/spring-context-4.3.xsd 
+        
+        http://www.springframework.org/schema/tx 
+        classpath:org/springframework/transaction/config/spring-tx-4.3.xsd 
+        
+        http://www.springframework.org/schema/aop 
+        classpath:org/springframework/aop/config/spring-aop-4.3.xsd ">
+
+	<!-- 识别Dao -->
+	<context:component-scan base-package="online.qsx.dao.impl" />
+
+	<!-- 得到数据库连接 -->
+	<bean id="ds" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql://localhost:3306/test" />
+		<property name="username" value="root" />
+		<property name="password" value="root" />
+	</bean>
+
+	<!-- hibernate -->
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<!-- hibernate 数据库连接 -->
+		<property name="dataSource" ref="ds" />
+		<!-- hibernate 属性 -->
+		<property name="hibernateProperties">
+			<value>
+				hibernate.dialect=org.hibernate.dialect.MySQLDialect
+				hibernate.show_sql=true
+				hibernate.format_sql=true
+				hibernate.hbm2ddl.auto=update
+			</value>
+		</property>
+		<!-- hibernate 扫描实体映射配置 -->
+		<property name="packagesToScan">
+			<list>
+				<value>online.qsx.model</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- 定义事务管理器（声明式的事务） -->  
+    <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory" />
+    </bean>
+
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="*" propagation="REQUIRED" />
+        </tx:attributes>
+    </tx:advice>
+    
+    <aop:config>
+        <aop:pointcut id="interceptorPointCuts" expression="execution(public * online.qsx.server.*.*.*(..))" />
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="interceptorPointCuts" />        
+    </aop:config> 
+    
+    <bean class="online.qsx.common.BaseDao">
+    	<property name="sessionFactory" ref="sessionFactory"/>
+    </bean>  
+    
+</beans>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:security="http://www.springframework.org/schema/security"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/security
+		http://www.springframework.org/schema/security/spring-security.xsd">
+
+	<!-- 不需要权限控制的 URL 资源 -->
+	<security:http pattern="/assets/**" security="none" />
+	<security:http pattern="/common/**" security="none" />
+	<security:http pattern="/login**" security="none" />
+
+	<!-- 用户登录处理 URL 映射配置 -->
+	<security:http auto-config="true" use-expressions="true" access-decision-manager-ref="accessDecisionManager">
+		<security:csrf disabled="true" />
+		<security:logout logout-success-url="/index" />
+		<security:form-login login-page='/login' login-processing-url="/dologin" username-parameter="username"
+			password-parameter="password" default-target-url='/index' always-use-default-target='true' />
+		<security:custom-filter before="FILTER_SECURITY_INTERCEPTOR" ref="filterSecurityInterceptor" />
+	</security:http>
+
+	<!-- 认证管理器 -->
+	<security:authentication-manager alias="authenticationManager">
+		<security:authentication-provider user-service-ref="simpleUserDetailsService">
+			<security:password-encoder hash="sha"> <!--登录密码加载算法，可选项还包括：plaintext(明文密码，不推荐使用) ，md5 -->
+				<security:salt-source ref="passwordSaltSource" />
+			</security:password-encoder>
+		</security:authentication-provider>
+	</security:authentication-manager>
+
+	<!-- 密码混淆类 -->
+	<bean id="passwordSaltSource" class="com.qingshixun.project.crm.security.UserPasswordSaltSource" />
+
+	<!-- 用户信息获取类 -->
+	<bean id="simpleUserDetailsService" class="com.qingshixun.project.crm.security.SimpleUserDetailsService" />
+
+	<!-- Spring Security 安全控制过滤器 -->
+	<bean id="filterSecurityInterceptor" class="org.springframework.security.web.access.intercept.FilterSecurityInterceptor">
+		<property name="authenticationManager" ref="authenticationManager" />
+		<property name="accessDecisionManager" ref="accessDecisionManager" />
+		<property name="runAsManager" ref="runAsManager" />
+		<property name="securityMetadataSource" ref="simpleSecurityMetadataSource" />
+	</bean>
+
+	<!-- 项目实现的URL-授权查询服务 -->
+	<bean id="simpleSecurityMetadataSource" init-method="loadResourceDefine"
+		class="com.qingshixun.project.crm.security.SimpleSecurityMetadataSource">
+	</bean>
+
+	<!-- 授权判断配置, 将授权名称的默认前缀由ROLE_改为A_. -->
+	<bean id="accessDecisionManager" class="org.springframework.security.access.vote.AffirmativeBased">
+		<constructor-arg>
+			<list>
+				<bean class="org.springframework.security.access.vote.RoleVoter">
+					<property name="rolePrefix" value="" />
+				</bean>
+			</list>
+		</constructor-arg>
+	</bean>
+
+	<bean id="runAsManager" class="org.springframework.security.access.intercept.RunAsManagerImpl">
+		<property name="key" value="my_run_as_password" />
+	</bean>
+
+	<bean id="runAsAuthenticationProvider" class="org.springframework.security.access.intercept.RunAsImplAuthenticationProvider">
+		<property name="key" value="my_run_as_password" />
+	</bean>
+</beans>

@@ -1,0 +1,7 @@
+.settings
+.classpath
+.project
+.idea
+target
+SSH.iml
+crm.iml

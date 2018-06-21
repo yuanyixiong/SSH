@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+
+    <constant name="struts.enable.DynamicMethodInvocation" value="true" />
+    <constant name="struts.devMode" value="true" />
+
+    <package name="default" namespace="/" extends="json-default">
+
+        <!--http://localhost:80/studentAction!list-->
+        <action name="studentAction!*" class="studentAction" method="{1}">
+            <result name="list">/student/index.jsp</result>
+            <result name="do_delete" type="redirectAction">studentAction!list</result>
+            <result name="to_edit">/student/edit.jsp</result>
+        </action>
+
+        <!--http://localhost:80/userAction!list-->
+        <action name="userAction!*" class="userAction" method="{1}">
+            <result name="list">/user/index.jsp</result>
+            <result name="do_delete" type="redirectAction">userAction!list</result>
+            <result name="to_edit">/user/edit.jsp</result>
+        </action>
+
+    </package>
+
+</struts>

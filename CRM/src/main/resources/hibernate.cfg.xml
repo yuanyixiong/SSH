@@ -1,0 +1,62 @@
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+	<session-factory>
+		<property name="dialect">org.hibernate.dialect.MySQLDialect</property>
+		<property name="show_sql">true</property>
+		<property name="format_sql">true</property>
+		<property name="cache.use_second_level_cache">false</property>
+		<property name="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.EhCacheRegionFactory</property>
+		<property name="max_fetch_depth">2</property>
+		<property name="cache.provider_class">org.hibernate.cache.EhCacheProvider</property>
+		<property name="connection.autocommit">true</property>
+		<property name="cache.provider_configuration_file_resource_path">ehcache-hibernate.xml</property>
+		<!-- <property name="enable_lazy_load_no_trans">true</property> -->
+		<!-- <property name="hbm2ddl.auto">update</property> -->
+
+		<!-- 数据实体定义，此处设置主要用来生成数据库脚本（DDL） -->
+		<mapping class="com.qingshixun.project.crm.model.BaseModel" />
+		<mapping class="com.qingshixun.project.crm.model.CampaignModel" />
+		<mapping class="com.qingshixun.project.crm.model.CampaignStatus" />
+		<mapping class="com.qingshixun.project.crm.model.CampaignType" />
+		<mapping class="com.qingshixun.project.crm.model.CityModel" />
+		<mapping class="com.qingshixun.project.crm.model.ContactModel" />
+		<mapping class="com.qingshixun.project.crm.model.CustomerModel" />
+		<mapping class="com.qingshixun.project.crm.model.CustomerResource" />
+		<mapping class="com.qingshixun.project.crm.model.CustomerStatus" />
+		<mapping class="com.qingshixun.project.crm.model.DepartmentModel" />
+		<mapping class="com.qingshixun.project.crm.model.DictionaryModel" />
+		<mapping class="com.qingshixun.project.crm.model.Freight" />
+		<mapping class="com.qingshixun.project.crm.model.IssueModel" />
+		<mapping class="com.qingshixun.project.crm.model.IssuePriority" />
+		<mapping class="com.qingshixun.project.crm.model.IssueStatus" />
+		<mapping class="com.qingshixun.project.crm.model.MenuModel" />
+		<mapping class="com.qingshixun.project.crm.model.OperateLogModel" />
+		<mapping class="com.qingshixun.project.crm.model.OpportunityModel" />
+		<mapping class="com.qingshixun.project.crm.model.OpportunityStatus" />
+		<mapping class="com.qingshixun.project.crm.model.ProblemModel" />
+		<mapping class="com.qingshixun.project.crm.model.ProblemStatus" />
+		<mapping class="com.qingshixun.project.crm.model.CategoryModel" />
+		<mapping class="com.qingshixun.project.crm.model.ProductModel" />
+		<mapping class="com.qingshixun.project.crm.model.ProductStatus" />
+		<mapping class="com.qingshixun.project.crm.model.ProspectiveModel" />
+		<mapping class="com.qingshixun.project.crm.model.ProvinceModel" />
+		<mapping class="com.qingshixun.project.crm.model.PurchaseOrderItemModel" />
+		<mapping class="com.qingshixun.project.crm.model.PurchaseOrderModel" />
+		<mapping class="com.qingshixun.project.crm.model.PurchaseOrderStatus" />
+		<mapping class="com.qingshixun.project.crm.model.QuotationItemModel" />
+		<mapping class="com.qingshixun.project.crm.model.QuotationModel" />
+		<mapping class="com.qingshixun.project.crm.model.QuotationStatus" />
+		<mapping class="com.qingshixun.project.crm.model.RegionModel" />
+		<mapping class="com.qingshixun.project.crm.model.ResourceModel" />
+		<mapping class="com.qingshixun.project.crm.model.RoleModel" />
+		<mapping class="com.qingshixun.project.crm.model.SalesOrderItemModel" />
+		<mapping class="com.qingshixun.project.crm.model.SalesOrderModel" />
+		<mapping class="com.qingshixun.project.crm.model.SalesOrderStatus" />
+		<mapping class="com.qingshixun.project.crm.model.SupplierModel" />
+		<mapping class="com.qingshixun.project.crm.model.UserModel" />
+		<mapping class="com.qingshixun.project.crm.model.UserSettingModel" />
+		<mapping class="com.qingshixun.project.crm.model.UserStatus" />
+	</session-factory>
+</hibernate-configuration>

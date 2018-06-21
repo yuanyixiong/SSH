@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+	<!-- 修改动态方法的调用,true 动态方法，false 非动态方法 -->
+	<constant name="struts.enable.DynamicMethodInvocation" value="true"/>
+	
+    <package name="default" namespace="/" extends="struts-default">
+    	<!-- http://localhost:8080/SSH/userAction!findUsers -->
+        <action name="userAction!*" class="userAction" method="{1}">
+            <result name="list">/WEB-INF/jsp/list.jsp</result>
+            <result name="succeed">/WEB-INF/jsp/list.jsp</result>
+            <result name="info">/WEB-INF/jsp/info.jsp</result>
+            <result name="update">/WEB-INF/jsp/update.jsp</result>
+        </action>
+    </package>
+</struts>
